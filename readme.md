@@ -1,4 +1,4 @@
-#browserify-shimmy
+# browserify-shimmy
 
 A browserify plugin that lets you turn this:
 
@@ -8,7 +8,7 @@ Into this:
 
     var react = window.React;
 
-#Usage
+# Usage
 
 Install like this: (not on npm yet)
 
@@ -32,7 +32,7 @@ any time `require('react')` is called, it uses window.React
 which is from the CDN.
 
 
-#Alternatives
+# Alternatives
 
 There are a lot of alternatives, so I'll explain why they don't work...
 
