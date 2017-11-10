@@ -9,6 +9,7 @@ var pathToTestSrc = __dirname+"/src/index.js";
 async.series(
   [
     function (cb) {
+      console.log("Should fail to load without plugin...");
       var bundle = browserify(pathToTestSrc);
       bundleToString(bundle, function(err, js){
         assert.ok(String(err).indexOf("Cannot find module 'target-lib'") > -1);
@@ -16,6 +17,7 @@ async.series(
       });
     },
     function (cb) {
+      console.log("Should succeed with plugin...");
       var shimmySettings = { "target-lib": "module.exports = window.TargetLib;" };
 
       var bundle = browserify(pathToTestSrc).plugin(shimmy, shimmySettings);
