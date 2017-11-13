@@ -11,6 +11,8 @@ it like normal. For example:
 
 What makes `shimmy` special is that it also works on code in `node_modules`.
 
+> Shimmy is designed/tested with Browserify `14.5.0` but should work on any version.
+
 # The Problem
 
 Say you're using `react` and `react-dnd`.  React takes a long time to bundle and to download,
@@ -96,3 +98,11 @@ in node_modules.
 
 Also, browserify-shim forces you to use global configuration (through package.json) which
 makes testing or multiple bundle configurations nearly impossible.
+
+# Testing
+
+Run `npm test`.
+
+# Questions
+
+@bendytree
