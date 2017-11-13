@@ -45,7 +45,7 @@ the ones in `node_modules`.
 
 # Usage
 
-Install like this: (not on npm yet)
+Install like this:
 
     npm i browserify-shimmy --save-dev
 
