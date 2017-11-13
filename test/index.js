@@ -5,25 +5,36 @@ var vm = require('vm');
 var browserify = require('browserify');
 var shimmy = require('../');
 var pathToTestSrc = __dirname+"/src/index.js";
+var context = {
+  assert: assert,
+  window: {
+    A: { name: "a" }
+  }
+};
 
 async.series(
   [
     function (cb) {
-      console.log("Should fail to load without plugin...");
+      console.log("Testing regular bundle...");
       var bundle = browserify(pathToTestSrc);
       bundleToString(bundle, function(err, js){
-        assert.ok(String(err).indexOf("Cannot find module 'target-lib'") > -1);
+        assert.ok(!err, "Unexpected error: "+err);
+        assert.ok(js.indexOf("THIS_CODE_SHOULD_NOT_BE_BUNDLED") > -1, "node_modules/a should be in the bundle!");
+        assert.throws(() => {
+          vm.runInNewContext(js, context);
+        }, /window.A !== a/);
         cb();
       });
     },
-    function (cb) {
-      console.log("Should succeed with plugin...");
-      var shimmySettings = { "target-lib": "module.exports = window.TargetLib;" };
 
+    function (cb) {
+      console.log("Testing shimmy bundle...");
+      var shimmySettings = { "a": "module.exports = window.A;" };
       var bundle = browserify(pathToTestSrc).plugin(shimmy, shimmySettings);
       bundleToString(bundle, function(err, js){
-        assert.ok(!err);
-        vm.runInNewContext(js, {window:{}});
+        assert.ok(!err, "Unexpected error: "+err);
+        assert.ok(js.indexOf("THIS_CODE_SHOULD_NOT_BE_BUNDLED") === -1, "node_modules/a should not be in the bundle!");
+        vm.runInNewContext(js, context);
         cb();
       });
     }
